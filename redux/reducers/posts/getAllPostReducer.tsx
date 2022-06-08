@@ -5,46 +5,46 @@
 
 // Fonction d'appel asyncrone au service
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {getOne} from "../../services/postServices";
+import {getAll, getOne} from "../../services/postServices";
 import Post from "../../domain/post";
 
-export const getOnePostThunk = createAsyncThunk(
-    'post/getOne',
-    async (postId:number, thunkAPI) => {
-        let response = initialGetOne;
+export const getAllPostThunk = createAsyncThunk(
+    'post/getAll',
+    async ( thunkAPI) => {
+        let response = initialGetAll;
 
-        await getOne(postId).then((value)=>{
-            response=value;
+        await getAll().then((value)=>{
+            response=value.data;
         });
         return response;
     }
 );
 
 // Modéle du DTO de retour
-interface getOnePost {
+interface getAllPost {
     entities: Post,
     loading: 'idle' | 'pending' | 'succeeded' | 'failed',
     error:null
 };
 
 // Valeur initial du DTO de retour
-const initialGetOne:getOnePost= {
-    entities: {id:0,userId:0,title:"",body:""},
+const initialGetAll:getAllPost= {
+    entities: null,
     loading: 'idle',
     error:null
 };
 
 // le reducer en question
-export const getOnePostSlice= createSlice({
-    name:"getOnePost",
-    initialState:initialGetOne ,
+export const getAllPostSlice= createSlice({
+    name:"getAllPost",
+    initialState:initialGetAll ,
     reducers:{
-        resetGetOne:(state)=> {
+        resetGetall:(state)=> {
             state.loading="idle";
         }
     },
     extraReducers: {
-        [getOnePostThunk.fulfilled]:(state,{payload})=>{
+        [getAllPostThunk.fulfilled]:(state,{payload})=>{
             state.loading="succeeded"
             state.entities=payload
         }
@@ -53,4 +53,4 @@ export const getOnePostSlice= createSlice({
 
 
 
-export const {resetGetOne}=getOnePostSlice.actions;
+export const {resetGetall}=getAllPostSlice.actions;

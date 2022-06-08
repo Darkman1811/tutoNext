@@ -1,5 +1,5 @@
 
-//=======================================  TO ADD A  PROJECT  =======================================================
+//=======================================  TO ADD A  POST  =======================================================
 
 
 
@@ -9,11 +9,13 @@ import {add} from "../../services/postServices";
 import Post from "../../domain/post";
 
 export const addPostThunk = createAsyncThunk(
-    'projects/add',
+    'posts/add',
     async (post:Post, thunkAPI) => {
         let response = initialAdd;
+
         await add(post).then((value)=>{
             response=value.data;
+            console.log("addPostThunk:===>",value);
         });
         return response;
     }

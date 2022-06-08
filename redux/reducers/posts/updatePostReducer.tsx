@@ -1,51 +1,54 @@
 
-//=======================================  TO ADD A  POST  =======================================================
+//=======================================  TO UPDATE A  POST  =======================================================
 
 
 
 // Fonction d'appel asyncrone au service
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {add} from "../../services/postServices";
+import {add, updateService} from "../../services/postServices";
 import Post from "../../domain/post";
+import {upd} from "../../services/postServices"
+import updatePost from "../../../pages/updatePost";
 
-export const addPostThunk = createAsyncThunk(
-    'posts/add',
+export const updatePostThunk = createAsyncThunk(
+    'posts/update',
     async (post:Post, thunkAPI) => {
-        let response = initialAdd;
+        let response = initial;
+        console.log("updatePostThunk:===>",post);
 
-        await add(post).then((value)=>{
+        await updateService(post).then((value)=>{
             response=value.data;
-            console.log("addPostThunk:===>",value);
+            console.log("updatePostThunk:===>",value);
         });
         return response;
     }
 );
 
 // Modéle du DTO de retour
-interface addPost {
+interface postDTO {
     entities: Post,
     loading: 'idle' | 'pending' | 'succeeded' | 'failed',
     error:null
 };
 
 // Valeur initial du DTO de retour
-const initialAdd:addPost= {
+const initial:postDTO= {
     entities: {id:0,userId:0,title:"",body:""},
     loading: 'idle',
     error:null
 };
 
 // le reducer en question
-export const addPostSlice= createSlice({
-    name:"addPost",
-    initialState:initialAdd ,
+export const updatePostSlice= createSlice({
+    name:"updatePost",
+    initialState:initial ,
     reducers:{
-        resetAdd:(state)=> {
+        resetUpdate:(state)=> {
             state.loading="idle";
         }
     },
     extraReducers: {
-        [addPostThunk.fulfilled]:(state,{payload})=>{
+        [updatePostThunk.fulfilled]:(state,{payload})=>{
             state.loading="succeeded"
             state.entities=payload
         }
@@ -54,4 +57,4 @@ export const addPostSlice= createSlice({
 
 
 
-export const {resetAdd}=addPostSlice.actions;
+export const {resetUpdate}=updatePostSlice.actions;

@@ -5,50 +5,48 @@
 
 // Fonction d'appel asyncrone au service
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {add, updateService} from "../../services/postServices";
+import { deleteService} from "../../services/postServices";
 import Post from "../../domain/post";
-import {upd} from "../../services/postServices"
-import updatePost from "../../../pages/updatePost";
+import {addPostSlice} from "./updatePostReducer";
 
-export const updatePostThunk = createAsyncThunk(
-    'posts/update',
+export const deletePostThunk = createAsyncThunk(
+    'posts/delete',
     async (post:Post, thunkAPI) => {
-        let response = initial;
-        console.log("updatePostThunk:===>",post);
+        let response = initialDelete;
 
-        await updateService(post).then((value)=>{
+        await deleteService(post.id).then((value)=>{
             response=value.data;
-            console.log("updatePostThunk:===>",value);
+            console.log("Detete project reducer : ====>",value)
         });
         return response;
     }
 );
 
 // Modéle du DTO de retour
-interface postDTO {
+interface deletePostDTO {
     entities: Post,
     loading: 'idle' | 'pending' | 'succeeded' | 'failed',
     error:null
 };
 
 // Valeur initial du DTO de retour
-const initial:postDTO= {
+const initialDelete:deletePostDTO= {
     entities: {id:0,userId:0,title:"",body:""},
     loading: 'idle',
     error:null
 };
 
 // le reducer en question
-export const addPostSlice= createSlice({
-    name:"updatePost",
-    initialState:initial ,
+export const deletePostSlice= createSlice({
+    name:"deletePost",
+    initialState:initialDelete ,
     reducers:{
-        resetAdd:(state)=> {
+        resetDelete:(state)=> {
             state.loading="idle";
         }
     },
     extraReducers: {
-        [updatePostThunk.fulfilled]:(state,{payload})=>{
+        [deletePostThunk.fulfilled]:(state,{payload})=>{
             state.loading="succeeded"
             state.entities=payload
         }
@@ -57,4 +55,4 @@ export const addPostSlice= createSlice({
 
 
 
-export const {resetAdd}=addPostSlice.actions;
+export const {resetDelete}=deletePostSlice.actions;

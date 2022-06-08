@@ -12,16 +12,16 @@ export const add= async (post:Post) => {
 }
 
 export const getAll=  () => {
-    return  axios.get(BASE_URL, headers);
+    return  axios.get(BASE_URL+"?_limit=10", headers);
 }
 
 
-export const del=  (id:number) => {
+export const deleteService=  (id:number) => {
     return  axios.delete(BASE_URL+"/"+id, headers);
 }
 
-export const updateProjectService= (post:Post)=>{
-    return axios.put(BASE_URL,post,headers);
+export const updateService= (post:Post)=>{
+    return axios.put(BASE_URL+"/"+post.id,post,headers);
 }
 
 export const getOne= async (id:number) => {
